@@ -231,5 +231,5 @@ def run_test(net, initial_conditions, target, max_counter, dt, update_inputs, mu
 
     #for i in range(len(omega)):
     #    score += + np.exp(-np.mean(omega)**2)
-        score = 1/(1+(np.mean(dist))) #+ 1/(1+abs(np.mean(omega)) )
+        score = 1/(1+np.mean(dist)) + 1/(1+np.mean(dist)+abs(np.mean(omega)) )
     return [score, L, R, stop]

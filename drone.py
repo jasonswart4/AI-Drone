@@ -14,7 +14,7 @@ update_inputs = [character_size, screen_size, sprites, win]
 # initial parameters
 
 initial_conditions = [[0,0,0] , [0,0,0] , [0,0,0]]
-target = [[1e-6,100], [100,100]]
+target = [[100,40], [100,100], [50, 40], [30,30], [-30,100]]
 max_counter = 100000
 dt = 0.05
 
