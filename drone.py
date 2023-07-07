@@ -1,31 +1,20 @@
 import AIDroneLib as lib
-from tensorflow.keras.models import load_model
+import tensorflow.keras as tf
 import matplotlib.pyplot as plt
-import pygame
-
 # Initialising the game
 character_size = [64, 64]
 screen_size = [1500, 790]
-[sprites, win] = lib.game_init(character_size, screen_size)
+game = lib.Game(screen_size, character_size)
 
-# Inputs needed for updating the game screen
-update_inputs = [character_size, screen_size, sprites, win]
+targets = [[100,20],[0,60]]
+drones = [lib.Drone(0,[[0,0,0],[0,0,0],[0,0,0]],targets)]
+drones[0].brain.set_weights(tf.models.load_model('n').get_weights())
+scores = [0]
+max_score = 1e6
+game.break_angle = 1e6
+drones[0].dt = 0.05
 
-# initial parameters
+for tests in range(5000):
 
-initial_conditions = [[0,0,0] , [0,0,0] , [0,0,0]]
-target = [[100,40], [100,100], [50, 40], [30,30], [-30,100]]
-max_counter = 100000
-dt = 0.05
-
-net = load_model('m')
-[score, L, R, stop] = lib.run_test(net, initial_conditions, target, max_counter, dt, update_inputs, False, [0])
-
-
-plt.plot(L)
-plt.plot(R)
-plt.legend(["Left Thrust", "Right Thrust"])
-plt.show()
-
-print(score)
-print(net.get_weights())
+    lib.run_test(game, drones, max_score)
+    drones[0].alive = True
