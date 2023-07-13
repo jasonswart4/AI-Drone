@@ -6,15 +6,15 @@ character_size = [64, 64]
 screen_size = [1500, 790]
 game = lib.Game(screen_size, character_size)
 
-targets = [[100,20],[0,60]]
+targets = [[100,0],[0,60]]
 drones = [lib.Drone(0,[[0,0,0],[0,0,0],[0,0,0]],targets)]
-drones[0].brain.set_weights(tf.models.load_model('n').get_weights())
+drones[0].brain.set_weights(tf.models.load_model('m').get_weights())
 scores = [0]
 max_score = 1e6
 game.break_angle = 1e6
 drones[0].dt = 0.05
 
-for tests in range(5000):
-
-    lib.run_test(game, drones, max_score)
-    drones[0].alive = True
+lib.run_test(game, drones, max_score)
+plt.plot(drones[0].thrust[0])
+plt.plot(drones[0].thrust[1])
+plt.show()
