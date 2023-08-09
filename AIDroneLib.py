@@ -175,7 +175,7 @@ class Game():
         for i in range(len(drones)):
             if drones[i].alive:
                 [target_x, target_y] = drones[i].targets[drones[i].iTarget]
-                [x_new, y_new, th_new] = drones[i].position
+                [x_new, y_new, th_new] = [drones[0].position[j].numpy() for j in range(3)]
                 rotated_image = pygame.transform.rotate(self.im_drone, th_new * 180 / 3.14159265359)
                 self.win.blit(rotated_image, (
                 (self.w - (self.char_w * abs(np.cos(th_new)) + self.char_h * abs(np.sin(th_new)))) / 2 + x_new,
@@ -221,6 +221,8 @@ class Game():
                 if event.key == pygame.K_q:
                     run = False
         return run
+    def quit(self):
+        pygame.quit()
 
 
 
