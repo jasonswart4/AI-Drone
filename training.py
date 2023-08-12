@@ -1,14 +1,14 @@
-import AIDroneLib as lib
+from functions import *
 import tensorflow.keras as tf
 import copy
 import numpy as np
 # Initialising the game
 character_size = [64, 64]
 screen_size = [1500, 790]
-game = lib.Game(screen_size, character_size)
+game = Game(screen_size, character_size)
 
 targets = [[0,0], [0,20], [100,30], [-10,20], [50,10], [0,10]]
-drones = [lib.Drone(i,[[0,0,0],[0,0,0],[0,0,0]],targets) for i in range(100)]
+drones = [Drone(i,[[0,0,0],[0,0,0],[0,0,0]],targets) for i in range(100)]
 scores = [0]
 max_score = -1e6
 #r = [0.2,0.01]
@@ -29,7 +29,7 @@ game.max_dist = 200
 tests = 0
 while True:
     tests += 1
-    [max_index, max_score] = lib.run_test(game, drones, max_score)
+    [max_index, max_score] = run_test(game, drones, max_score)
     best = drones[max_index].brain.get_weights()
     #r = min(1, 0.001*(max_score**(-1)-1))
     theta = np.random.rand()*2*3.14
