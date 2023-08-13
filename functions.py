@@ -27,7 +27,7 @@ def createNet(structure, activF):
     '''
 
     name = tf.Sequential()
-    name.add(layers.Dense(structure[1], activation=activF, input_shape=(structure[0],)))
+    name.add(layers.Dense(structure[1], activation='relu', input_shape=(structure[0],)))
     for i in range(len(structure) - 1):
         name.add(layers.Dense(structure[i + 1], activation=activF))
 
@@ -87,13 +87,13 @@ class Drone:
     def __init__(self, number, state, targets):
         self.number = number
         [self.position, self.velocity, self.acceleration] = state
-        self.brain = createNet([6,8,8,2], 'tanh')
+        self.brain = createNet([6,8,2], 'tanh')
         self.targets = targets
         self.iTarget = 0
         self.close_counter = 0
         self.dt = 0.05
         self.dist = Drone.get_dist(self)
-        self.max_thrust = 60
+        self.max_thrust = 100
         self.radius = .215/2
         self.I = 0.266
         self.mass = 1
@@ -116,11 +116,14 @@ class Drone:
         #    net_inputs[0][i] = net_inputs[0][i] + np.random.rand() * net_inputs[0][i] * 0.0001
 
         #[[L_thrust, R_thrust]] = self.mass / 2 * (-self.g) + self.max_thrust*self.brain.predict(net_inputs, verbose=0)# percentage of thrust for tanh
-        [[L_thrust, R_thrust]] = self.brain(net_inputs)*5
+        [[L_thrust, R_thrust]] = self.brain(net_inputs)
+        
+        L_thrust*=self.max_thrust
+        R_thrust*=self.max_thrust
         #L_thrust = abs(L_thrust)
         #R_thrust = abs(R_thrust)
-        L_thrust = min(self.mass / 2 * (-self.g) + L_thrust + np.random.rand()*0.0001, self.max_thrust)
-        R_thrust = min(self.mass / 2 * (-self.g) + R_thrust + np.random.rand()*0.0001, self.max_thrust)
+        #L_thrust = min(self.mass / 2 * (-self.g) + L_thrust + np.random.rand()*0.0001, self.max_thrust)
+        #R_thrust = min(self.mass / 2 * (-self.g) + R_thrust + np.random.rand()*0.0001, self.max_thrust)
 
         #xtar = np.tanh((self.targets[0][0] - self.position[0]))
         #ytar = np.tanh((self.targets[0][1] - self.position[1]))
